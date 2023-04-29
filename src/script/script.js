@@ -23,13 +23,12 @@ function displayTasks() {
       <div id ="content" class="container d-flex col-4 mt-2 justify-content-between">
         <div class="d-flex gap-3"> 
             <button class="choose"></button>
-            <h1>${index+1})</h1>
             <h1>${todo.name}</h1>
+            <p id="description">${todo.desc}</p>
         </div>
             <button class="removeBtn">X</button>
       </div>
       `;
-
       const removeBtn = div.querySelector('.removeBtn')
       removeBtn.addEventListener('click', () => {
             todos.splice(index, 1);
@@ -43,7 +42,11 @@ function displayTasks() {
         div.classList.toggle('choosed')
         choosed.style.visibility = 'unset'
       })
+      
       tasks.appendChild(div)
+      const description = div.querySelector('#description');
+      const truncatedDesc = todo.desc.substring(0, 10) + "...";
+      description.textContent = (todo.desc.length > 10) ? truncatedDesc : todo.desc;
     })
 }
 function controls() {

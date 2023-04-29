@@ -47,7 +47,14 @@ function displayTasks() {
       const description = div.querySelector('#description');
       const truncatedDesc = todo.desc.substring(0, 10) + "...";
       description.textContent = (todo.desc.length > 10) ? truncatedDesc : todo.desc;
+      description.addEventListener('click', () => {
+      if (description.textContent === truncatedDesc) {
+        description.textContent = todo.desc;
+      } else {
+        description.textContent = truncatedDesc;
+      }
     })
+})
 }
 function controls() {
   tasksControls.innerHTML = `

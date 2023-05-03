@@ -1,6 +1,5 @@
 
 .removeBtn{
-    display: none;
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -11,17 +10,6 @@
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    visibility: hidden;
+   
 }
-#content:hover .removeBtn{
-    display: block;
-}
-#content:hover .choose{
-  visibility: unset;
-}
-.green{
-    background-color: green;
-}
-.displayNone{
-    display: none;
-}
+

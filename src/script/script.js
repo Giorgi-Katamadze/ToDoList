@@ -1,5 +1,4 @@
 // declare everything needed from HTML
-const addBtn = document.getElementById('add');
 const tasks = document.getElementById('tasks');
 const tasksControls = document.getElementById('tasksControls')
 
@@ -8,30 +7,26 @@ const todos = JSON.parse(localStorage.getItem('todos')) || [];
 let status = false
 let id = todos.length
 
-// add task on click 
-addBtn.addEventListener('click', () => {
+// add task if submit 
+document.querySelector('form').addEventListener('submit', (event) => {
+  event.preventDefault()
   const toDoName = document.getElementById('toDoName').value;
   const input = document.getElementById('toDoName')
-  function validateInput() {
-    var inputValue = toDoName
-    if (inputValue === "") {
-      input.setCustomValidity('Please enter a valid input');
-    } 
-    else {
-      input.setCustomValidity('')
-      const newTodo = { id: id , name: toDoName, status: status};
-      todos.push(newTodo);
-      localStorage.setItem('todos', JSON.stringify(todos));
-      document.getElementById('toDoName').value = '';
-      displayTasks()
-      controls()
-    }
+  if (input.value === '') {
+    document.querySelector('span').classList.remove('show');
+  } else {
+    document.querySelector('span').classList.add('show');
+    const newTodo = { id: id, name: toDoName, status: status };
+    todos.push(newTodo);
+    localStorage.setItem('todos', JSON.stringify(todos));
+    document.getElementById('toDoName').value = '';
+    id++
+    displayTasks();
+    controls()
   }
-  validateInput()
 });
 
-
-
+//display tasks after submit
 function displayTasks() {
   tasks.innerHTML = ''; 
   todos.forEach((todo) => {
@@ -47,19 +42,18 @@ function displayTasks() {
     </div>
     `;
     // remove task
-    const removeBtn = div.querySelector('.removeBtn')
+    const removeBtn = div.querySelector('.removeBtn');
     removeBtn.addEventListener('click', () => {
-      const index = todo.id;
-      todos.splice(todos.findIndex(todo => todo.id === index), 1);
-      localStorage.setItem('todos', JSON.stringify(todos));
-     if (todos.length == 0){
-      id = 0
-     }
-      div.remove();
-      controls();
-    })
-
-
+    const index = todo.id;
+    todos.splice(todos.findIndex((todo) => todo.id === index), 1);
+    localStorage.setItem('todos', JSON.stringify(todos));
+    if (todos.length == 0) {
+      id = 0;
+    }
+    div.remove();
+    displayTasks();
+    controls()
+});
 
   // edit task
       const taskName = div.querySelector('.task');
@@ -103,9 +97,9 @@ function displayTasks() {
       choose.style.backgroundColor = ""
     }
     tasks.appendChild(div)
-  })
+  });
+  controls()
 }
-
 
 
 // display filters and controls for tasks
@@ -167,8 +161,11 @@ const count = tasksControls.querySelector('span')
     controls();
   });
 
-  if (todos.length == 0) {
+  if (todos.length === 0) {
     tasksControls.style.display = 'none';
+  }
+  else{
+    tasksControls.style.display = "unset"
   }
 }
 
@@ -182,7 +179,7 @@ function displayFilteredTasks(filteredTodos) {
       <div id="content" class="container d-flex col-4 mt-2 justify-content-between">
         <div class="d-flex gap-3"> 
           <button class="choose"></button>
-          <h1>${todo.name}</h1>
+          <h1 class="task">${todo.name}</h1>
         </div>
         <button class="removeBtn">X</button>
       </div>
@@ -196,10 +193,30 @@ function displayFilteredTasks(filteredTodos) {
       if (todos.length == 0) {
         id = 0;
       }
-      div.remove();
+      div.remove()
+      displayTasks()
       controls();
     });
-
+ // edit task
+    const taskName = div.querySelector('.task');
+    taskName.addEventListener('click', () => {
+    div.innerHTML = `
+   <div id ="content" class="container d-flex col-4 my-5 justify-content-around">
+       <input type="text" id="editName">
+       <button id="editBtn">change</button>
+     </div>
+   `;
+    const editBtn = div.querySelector('#editBtn');
+    const editNameInput = div.querySelector("#editName");
+    editNameInput.value = taskName.textContent; 
+    editBtn.addEventListener('click' , () =>{
+     const newName = editNameInput.value;
+     todo.name = newName;
+     localStorage.setItem('todos', JSON.stringify(todos));
+     taskName.textContent = newName; 
+     displayFilteredTasks(); 
+ });
+})
 
     // change status on completed tasks
     const choose = div.querySelector('.choose');
@@ -219,14 +236,12 @@ function displayFilteredTasks(filteredTodos) {
       choose.style.backgroundColor = "";
     }
     tasks.appendChild(div);
-  });
+  })
 }
-
-
-
 
 // on reload tasks stay visible
 document.addEventListener('DOMContentLoaded', () => {
-  displayTasks();
+  displayTasks()
+
   controls()
 })

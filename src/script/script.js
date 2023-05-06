@@ -8,16 +8,17 @@ const todos = JSON.parse(localStorage.getItem('todos')) || [];
 let status = false
 let id = todos.length
 
-
 // add task on click 
 addBtn.addEventListener('click', () => {
   const toDoName = document.getElementById('toDoName').value;
+  const input = document.getElementById('toDoName')
   function validateInput() {
     var inputValue = toDoName
     if (inputValue === "") {
-      alert("Please enter a task");
+      input.setCustomValidity('Please enter a valid input');
     } 
     else {
+      input.setCustomValidity('')
       const newTodo = { id: id , name: toDoName, status: status};
       todos.push(newTodo);
       localStorage.setItem('todos', JSON.stringify(todos));
@@ -58,17 +59,31 @@ function displayTasks() {
       controls();
     })
 
-    // edit task
-    const taskName = div.querySelector('.task')
-    taskName.addEventListener('click', () => {
-      const newName = prompt('edit task:', todo.name)
-      if (newName !== null && newName !== '') {
-        todo.name = newName;
-        localStorage.setItem('todos', JSON.stringify(todos));
-        taskName.textContent = newName;
-      }
+
+
+  // edit task
+      const taskName = div.querySelector('.task');
+      taskName.addEventListener('click', () => {
+        div.innerHTML = `
+        <div id ="content" class="container d-flex col-4 my-5 justify-content-around">
+            <input type="text" id="editName">
+            <button id="editBtn">change</button>
+          </div>
+        `;
+        const editBtn = div.querySelector('#editBtn');
+        const editNameInput = div.querySelector("#editName");
+        editNameInput.value = taskName.textContent; 
+        editBtn.addEventListener('click' , () =>{
+          const newName = editNameInput.value;
+          todo.name = newName;
+          localStorage.setItem('todos', JSON.stringify(todos));
+          taskName.textContent = newName; 
+          displayTasks(); 
+      });
     })
 
+    
+       
     //change status on complited tasks
     const choose = div.querySelector('.choose')
     choose.addEventListener('click', () => {
@@ -95,10 +110,11 @@ function displayTasks() {
 
 // display filters and controls for tasks
 function controls() {
+  let count = todos.length
   tasksControls.innerHTML = `
     <div class="container d-flex col-4 mt-5 justify-content-around">
       <div>
-        <h4>${todos.filter(todo => !todo.status).length} items left</h4>
+        <h4>${count} item</h4>
       </div>
       <div>
         <button id="all">All</button>
@@ -125,12 +141,14 @@ function controls() {
   // display only active to-dos
   active.addEventListener('click', () => {
     const activeTodos = todos.filter(todo => !todo.status);
+    count = todos.filter(todo => todo.status === false).length
     displayFilteredTasks(activeTodos);
   });
 
   // display only completed to-dos
   completed.addEventListener('click', () => {
     const completedTodos = todos.filter(todo => todo.status);
+    count = todos.filter(todo => todo.status === true).length
     displayFilteredTasks(completedTodos);
   });
 

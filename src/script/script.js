@@ -110,11 +110,15 @@ function displayTasks() {
 
 // display filters and controls for tasks
 function controls() {
-  let count = todos.length
   tasksControls.innerHTML = `
     <div class="container d-flex col-4 mt-5 justify-content-around">
       <div>
-        <h4>${count} item</h4>
+        <h4>
+        <span>
+        ${todos.length}
+        </span>
+        item
+        </h4>
       </div>
       <div>
         <button id="all">All</button>
@@ -126,6 +130,7 @@ function controls() {
       </div>
     </div>
   `;
+const count = tasksControls.querySelector('span')
 
   // display control buttons
   const all = tasksControls.querySelector('#all');
@@ -135,20 +140,21 @@ function controls() {
 
   // display all to-dos
   all.addEventListener('click', () => {
+    count.innerHTML = todos.length
     displayFilteredTasks(todos);
   });
 
   // display only active to-dos
   active.addEventListener('click', () => {
     const activeTodos = todos.filter(todo => !todo.status);
-    count = todos.filter(todo => todo.status === false).length
+    count.innerHTML = activeTodos.length
     displayFilteredTasks(activeTodos);
   });
 
   // display only completed to-dos
   completed.addEventListener('click', () => {
     const completedTodos = todos.filter(todo => todo.status);
-    count = todos.filter(todo => todo.status === true).length
+    count.innerHTML = completedTodos.length
     displayFilteredTasks(completedTodos);
   });
 
@@ -193,6 +199,7 @@ function displayFilteredTasks(filteredTodos) {
       div.remove();
       controls();
     });
+
 
     // change status on completed tasks
     const choose = div.querySelector('.choose');

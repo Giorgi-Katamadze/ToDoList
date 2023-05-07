@@ -24,7 +24,7 @@ document.querySelector('form').addEventListener('submit', (event) => {
     displayTasks();
     controls()
   }
-});
+})
 
 //display tasks after submit
 function displayTasks() {
@@ -76,8 +76,6 @@ function displayTasks() {
       });
     })
 
-    
-       
     //change status on complited tasks
     const choose = div.querySelector('.choose')
     choose.addEventListener('click', () => {
@@ -89,6 +87,7 @@ function displayTasks() {
       choose.style.visibility = "unset"
       controls();
     })
+
     // set choose btn bg based on task status
     if(todo.status===true){
       choose.style.backgroundColor = "green"
@@ -100,7 +99,6 @@ function displayTasks() {
   });
   controls()
 }
-
 
 // display filters and controls for tasks
 function controls() {
@@ -184,6 +182,7 @@ function displayFilteredTasks(filteredTodos) {
         <button class="removeBtn">X</button>
       </div>
     `;
+
     // remove task
     const removeBtn = div.querySelector('.removeBtn');
     removeBtn.addEventListener('click', () => {
@@ -197,6 +196,7 @@ function displayFilteredTasks(filteredTodos) {
       displayTasks()
       controls();
     });
+
  // edit task
     const taskName = div.querySelector('.task');
     taskName.addEventListener('click', () => {
@@ -229,6 +229,7 @@ function displayFilteredTasks(filteredTodos) {
       choose.style.visibility = "unset";
       controls();
     });
+    
     // set choose btn bg based on task status
     if (todo.status === true) {
       choose.style.backgroundColor = "green";

@@ -15,6 +15,18 @@ button{
     border: 1px solid #FF8303;
     color:#FF8303;
 }
+.task {
+    max-width: 100%;
+    overflow-x: auto;
+}
+.task::-webkit-scrollbar{
+    background-color: #1F1E1B;
+    height: 6px;
+}
+.task::-webkit-scrollbar-thumb {
+    background-color: #FF8303;
+    border-radius: 8px;
+}
 #editBtn{
     width: auto;
 }
@@ -64,5 +76,11 @@ input{
     color: red;
 }
   
+.swal2-styled.swal2-confirm{
+    width: auto;
+}
+.swal2-styled.swal2-cancel{
+    width: auto;
+}
   
   

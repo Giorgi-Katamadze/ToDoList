@@ -34,12 +34,15 @@ function displayTasks() {
       const div = document.createElement('div')
       div.classList.add('all')
       div.innerHTML += `
-    <div id="content" class="d-flex gap-5 justify-content-between align-items-center py-2 px-3 my-3 col-10 col-sm-8 col-md-7 mx-auto">
-      <div class="d-flex align-items-center gap-3 col-8"> 
-          <button class="choose"><i class="fa-solid fa-check"></i></button>
-          <h1 class="task col-8">${todo.name}</h1>
+    <div id="content" class="d-flex gap-2 justify-content-between align-items-center py-2 px-3 my-3 col-10 col-sm-8 col-md-7 mx-auto">
+      <div class="d-flex align-items-center gap-3 col-10"> 
+          <button class="choose col-2 col-md-1"><i class="fa-solid fa-check"></i></button>
+          <h1 class="task col-10 col-md-11">${todo.name}</h1>
       </div>
-          <button class="removeBtn"><i class="fa-solid fa-trash"></i></button>
+      <div clss="col-4">
+      <button class="removeBtn"><i class="fa-solid fa-trash"></i></button>
+      </div>
+          
     </div>
     `;
     // remove task
@@ -122,7 +125,7 @@ const index = todo.id;
 function controls() {
   tasksControls.innerHTML = `
     <div class="d-flex flex-wrap col-md-10 mx-auto justify-content-center align-items-center py-3">
-            <div class="col-12 col-lg-2 d-flex justify-content-start">
+            <div class="col-12 col-lg-2 d-flex justify-content-start px-3">
                 <h4><span>${todos.length}</span> ${todos.length === 1 ? 'task' : 'tasks'}</h4>
             </div>
             <div class="d-flex gap-3 gap-sm-2 gap-md-3 flex-wrap justify-content-center justify-content-md-end px-3">
@@ -206,12 +209,15 @@ function displayFilteredTasks(filteredTodos) {
     const div = document.createElement('div');
     div.classList.add('all');
     div.innerHTML += `
-    <div id="content" class="d-flex gap-5 justify-content-between align-items-center py-2 px-3 my-3 col-10 col-sm-8 col-md-7 mx-auto">
-      <div class="d-flex align-items-center gap-3"> 
-          <button class="choose"><i class="fa-solid fa-check"></i></button>
-          <h1 class="task col-8">${todo.name}</h1>
+    <div id="content" class="d-flex gap-2 justify-content-between align-items-center py-2 px-3 my-3 col-10 col-sm-8 col-md-7 mx-auto">
+      <div class="d-flex align-items-center gap-3 col-10"> 
+          <button class="choose col-2 col-md-1"><i class="fa-solid fa-check"></i></button>
+          <h1 class="task col-10 col-md-11">${todo.name}</h1>
       </div>
-          <button class="removeBtn"><i class="fa-solid fa-trash"></i></button>
+      <div clss="col-4">
+      <button class="removeBtn"><i class="fa-solid fa-trash"></i></button>
+      </div>
+          
     </div>
     `;
 

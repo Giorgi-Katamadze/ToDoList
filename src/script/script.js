@@ -1,3 +1,4 @@
+
 // declare everything needed from HTML
 const tasks = document.getElementById('tasks');
 const tasksControls = document.getElementById('tasksControls')
@@ -33,35 +34,52 @@ function displayTasks() {
       const div = document.createElement('div')
       div.classList.add('all')
       div.innerHTML += `
-    <div id ="content" class="container d-flex col-4 mt-2 justify-content-between">
-      <div class="d-flex gap-3"> 
-          <button class="choose"></button>
-          <h1 class="task">${todo.name}</h1>
+    <div id="content" class="d-flex gap-5 justify-content-between align-items-center py-2 px-3 my-3 col-10 col-sm-8 col-md-7 mx-auto">
+      <div class="d-flex align-items-center gap-3 col-8"> 
+          <button class="choose"><i class="fa-solid fa-check"></i></button>
+          <h1 class="task col-8">${todo.name}</h1>
       </div>
-          <button class="removeBtn">X</button>
+          <button class="removeBtn"><i class="fa-solid fa-trash"></i></button>
     </div>
     `;
     // remove task
-    const removeBtn = div.querySelector('.removeBtn');
-    removeBtn.addEventListener('click', () => {
-    const index = todo.id;
-    todos.splice(todos.findIndex((todo) => todo.id === index), 1);
-    localStorage.setItem('todos', JSON.stringify(todos));
-    if (todos.length == 0) {
-      id = 0;
+const removeBtn = div.querySelector('.removeBtn');
+removeBtn.addEventListener('click', () => {
+const index = todo.id;
+
+  // Show delete confirmation alert
+  Swal.fire({
+    title: 'Are you sure?',
+    text: 'You will not be able to recover this task!',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      todos.splice(todos.findIndex((todo) => todo.id === index), 1);
+      localStorage.setItem('todos', JSON.stringify(todos));
+      if (todos.length == 0) {
+        id = 0;
+      }
+      div.remove();
+      displayTasks();
+      controls();
+
+      // Show success message after deleting the task
+      Swal.fire('Deleted!', 'The task has been deleted.', 'success');
     }
-    div.remove();
-    displayTasks();
-    controls()
+  });
 });
+
 
   // edit task
       const taskName = div.querySelector('.task');
       taskName.addEventListener('click', () => {
         div.innerHTML = `
-        <div id ="content" class="container d-flex col-4 my-5 justify-content-around">
-            <input type="text" id="editName">
-            <button id="editBtn">change</button>
+        <div id ="content" class="d-flex gap-3 justify-content-between align-items-center py-3 px-3 my-3 col-10 col-sm-8 col-md-7 mx-auto">
+            <input type="text" id="editName" class="col-8">
+            <button id="editBtn" class="col-4">change</button>
           </div>
         `;
         const editBtn = div.querySelector('#editBtn');
@@ -76,50 +94,43 @@ function displayTasks() {
       });
     })
 
-    //change status on complited tasks
+   // Mark complited ToDos and change their status
     const choose = div.querySelector('.choose')
     choose.addEventListener('click', () => {
       const index = todo.id;
       const selectedTodo = todos.find(todo => todo.id === index);
       selectedTodo.status = !selectedTodo.status;
       localStorage.setItem('todos', JSON.stringify(todos));
-      choose.style.backgroundColor = selectedTodo.status ? "green" : "";
-      choose.style.visibility = "unset"
+      div.querySelector('h1').style.textDecorationLine = selectedTodo.status ? "line-through" : "";
+      choose.style.opacity = selectedTodo.status ? "100%" : "40%";
       controls();
     })
-
-    // set choose btn bg based on task status
-    if(todo.status===true){
-      choose.style.backgroundColor = "green"
+    // Apply styles based on the selected status
+    if (todo.status) {
+      div.querySelector('h1').style.textDecorationLine = "line-through";
+      choose.style.opacity = "100%";
+    } else {
+      div.querySelector('h1').style.textDecorationLine = "";
+      choose.style.opacity = "40%";
     }
-    else{
-      choose.style.backgroundColor = ""
+        tasks.appendChild(div)
+      });
+      controls()
     }
-    tasks.appendChild(div)
-  });
-  controls()
-}
 
 // display filters and controls for tasks
 function controls() {
   tasksControls.innerHTML = `
-    <div class="container d-flex col-4 mt-5 justify-content-around">
-      <div>
-        <h4>
-        <span>
-        ${todos.length}
-        </span>
-        item
-        </h4>
-      </div>
-      <div>
-        <button id="all">All</button>
-        <button id="active">Active</button>
-        <button id="completed">Completed</button>
-      </div>
-      <div>
-        <button id="clear">Clear Completed</button>
-      </div>
+    <div class="d-flex flex-wrap col-md-10 mx-auto justify-content-center align-items-center py-3">
+            <div class="col-12 col-lg-2 d-flex justify-content-start">
+                <h4><span>${todos.length}</span> ${todos.length === 1 ? 'task' : 'tasks'}</h4>
+            </div>
+            <div class="d-flex gap-3 gap-sm-2 gap-md-3 flex-wrap justify-content-center justify-content-md-end px-3">
+                <button id="all">All</button>
+                <button id="active">Active</button>
+                <button id="completed">Completed</button>
+                <button id="clear">Clear Completed</button>
+            </div> 
     </div>
   `;
 const count = tasksControls.querySelector('span')
@@ -150,17 +161,38 @@ const count = tasksControls.querySelector('span')
     displayFilteredTasks(completedTodos);
   });
 
-  // clear completed to-dos
+// clear completed to-dos
   clear.addEventListener('click', () => {
-    const uncompletedTodos = todos.filter(todo => !todo.status);
-    localStorage.setItem('todos', JSON.stringify(uncompletedTodos));
-    todos.splice(0, todos.length, ...uncompletedTodos);
-    displayTasks();
-    controls();
+  const uncompletedTodos = todos.filter((todo) => !todo.status);
+
+  // Show delete confirmation alert
+  Swal.fire({
+    title: 'Are you sure?',
+    text: 'This will delete all completed tasks!',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete them!',
+    cancelButtonText: 'Cancel',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      localStorage.setItem('todos', JSON.stringify(uncompletedTodos));
+      todos.splice(0, todos.length, ...uncompletedTodos);
+      displayTasks();
+      controls();
+
+      // Show success message after deleting the completed tasks
+      Swal.fire('Deleted!', 'Completed tasks have been deleted.', 'success');
+    }
   });
+});
 
   if (todos.length === 0) {
     tasksControls.style.display = 'none';
+    tasks.innerHTML = `
+    <div  class="col-12 text-center my-5 py-5">
+    <h1 class="noToDo col-4 mx-auto">No Tasks</h1>
+    </div>
+    ` 
   }
   else{
     tasksControls.style.display = "unset"
@@ -174,28 +206,45 @@ function displayFilteredTasks(filteredTodos) {
     const div = document.createElement('div');
     div.classList.add('all');
     div.innerHTML += `
-      <div id="content" class="container d-flex col-4 mt-2 justify-content-between">
-        <div class="d-flex gap-3"> 
-          <button class="choose"></button>
+    <div id="content" class="d-flex gap-5 justify-content-between align-items-center py-2 px-3 my-3 col-10 col-sm-8 col-md-7 mx-auto">
+      <div class="d-flex align-items-center gap-3"> 
+          <button class="choose"><i class="fa-solid fa-check"></i></button>
           <h1 class="task">${todo.name}</h1>
-        </div>
-        <button class="removeBtn">X</button>
       </div>
+          <button class="removeBtn"><i class="fa-solid fa-trash"></i></button>
+    </div>
     `;
 
     // remove task
-    const removeBtn = div.querySelector('.removeBtn');
-    removeBtn.addEventListener('click', () => {
-      const index = todo.id;
-      todos.splice(todos.findIndex(todo => todo.id === index), 1);
+const removeBtn = div.querySelector('.removeBtn');
+removeBtn.addEventListener('click', () => {
+const index = todo.id;
+
+  // Show delete confirmation alert
+  Swal.fire({
+    title: 'Are you sure?',
+    text: 'You will not be able to recover this task!',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      todos.splice(todos.findIndex((todo) => todo.id === index), 1);
       localStorage.setItem('todos', JSON.stringify(todos));
       if (todos.length == 0) {
         id = 0;
       }
-      div.remove()
-      displayTasks()
+      div.remove();
+      displayTasks();
       controls();
-    });
+
+      // Show success message after deleting the task
+      Swal.fire('Deleted!', 'The task has been deleted.', 'success');
+    }
+  });
+});
+
 
  // edit task
     const taskName = div.querySelector('.task');
@@ -218,31 +267,33 @@ function displayFilteredTasks(filteredTodos) {
  });
 })
 
-    // change status on completed tasks
-    const choose = div.querySelector('.choose');
+    // Mark complited ToDos and change their status
+    const choose = div.querySelector('.choose')
     choose.addEventListener('click', () => {
       const index = todo.id;
       const selectedTodo = todos.find(todo => todo.id === index);
       selectedTodo.status = !selectedTodo.status;
       localStorage.setItem('todos', JSON.stringify(todos));
-      choose.style.backgroundColor = selectedTodo.status ? "green" : "";
-      choose.style.visibility = "unset";
+      div.querySelector('h1').style.textDecorationLine = selectedTodo.status ? "line-through" : "";
+      choose.style.opacity = selectedTodo.status ? "100%" : "40%";
       controls();
-    });
-    
-    // set choose btn bg based on task status
-    if (todo.status === true) {
-      choose.style.backgroundColor = "green";
+    })
+    // Apply styles based on the selected status
+    if (todo.status) {
+      div.querySelector('h1').style.textDecorationLine = "line-through";
+      choose.style.opacity = "100%";
     } else {
-      choose.style.backgroundColor = "";
+      div.querySelector('h1').style.textDecorationLine = "";
+      choose.style.opacity = "40%";
     }
-    tasks.appendChild(div);
-  })
-}
+        tasks.appendChild(div);
+      })
+    }
 
 // on reload tasks stay visible
 document.addEventListener('DOMContentLoaded', () => {
   displayTasks()
-
   controls()
 })
+
+

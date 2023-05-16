@@ -1,15 +1,61 @@
+/* *{
+    border: 1px dashed wheat;
+} */
 
-.removeBtn{
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    border: 1px solid black;
+body{
+    background-color: #1B1A17;/* border: 1px dashed red; */
+    color:#FF8303;
 }
 
-.choose{
+button{
     width: 50px;
     height: 50px;
-    border-radius: 50%;
+    border-radius: 8px;
+    background-color: #1F1E1B;
+    border: 1px solid #FF8303;
+    color:#FF8303;
+}
+#editBtn{
+    width: auto;
+}
+
+input{
+    background-color: #1F1E1B;
+    border: 1px solid #A35709;
+    border-radius: 8px;
+    height: 50px;
+    color:#FF8303;
+}
+.noToDo{
+    border-top:1px solid #FF8303;
+    border-bottom:1px solid #FF8303;
+}
+
+#content{
+    background-color: #1F1E1B;
+    border: 1px solid #A35709;
+    border-radius: 8px;
+}
+
+#tasksControls button{
+    width: 100px;
+}
+#tasksControls button:nth-child(4){
+    width: 100%;
+}
+@media (min-width: 768px) {
+    #tasksControls button:nth-child(4){
+        width: 200px;
+    }
+    
+}
+#tasksControls{
+    position: fixed;;
+    bottom: 0%;
+    background-color:#1B1A17 ;
+}
+.choose{
+    opacity: 40%;
 }
 .show{
     display: none;
@@ -17,4 +63,6 @@
 .red{
     color: red;
 }
-
+  
+  
+  

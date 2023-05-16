@@ -209,7 +209,7 @@ function displayFilteredTasks(filteredTodos) {
     <div id="content" class="d-flex gap-5 justify-content-between align-items-center py-2 px-3 my-3 col-10 col-sm-8 col-md-7 mx-auto">
       <div class="d-flex align-items-center gap-3"> 
           <button class="choose"><i class="fa-solid fa-check"></i></button>
-          <h1 class="task">${todo.name}</h1>
+          <h1 class="task col-8">${todo.name}</h1>
       </div>
           <button class="removeBtn"><i class="fa-solid fa-trash"></i></button>
     </div>
